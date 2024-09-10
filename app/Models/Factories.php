@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Services\ModelEventService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Employee extends Model
+class Factories extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -18,18 +18,17 @@ class Employee extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'factory_id',
+        'factory_name',
+        'location',
         'email',
-        'phone',
+        'website',
     ];
 
     /**
-     * Get the factory that owns the employee.
+     * Get the employees for the factory.
      */
-    public function factory(): BelongsTo
+    public function employees(): HasMany
     {
-        return $this->belongsTo(Factories::class, 'factory_id', 'id');
+        return $this->hasMany(Employee::class);
     }
 }
