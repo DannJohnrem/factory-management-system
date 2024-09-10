@@ -112,4 +112,11 @@ return [
 
     'password_timeout' => 10800,
 
+
+    /* The `'registration' => ['enabled' => false]` configuration in the PHP code snippet is
+    controlling the registration feature in the application. */
+    'registration' => [
+        'enabled' => false,
+    ],
+
 ];
