@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\ModelEventService;
+use App\Services\UserActivityLogger;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,8 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(ModelEventService::class, function ($app) {
-            return new ModelEventService();
+        $this->app->singleton(UserActivityLogger::class, function () {
+            return new UserActivityLogger();
         });
     }
 

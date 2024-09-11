@@ -21,7 +21,7 @@
                 </li>
 
                 <li class="relative px-6 py-3">
-                    <NavLink :href="route('factories.index')" :active="route().current('factories.index')">
+                    <NavLink :href="route('factories.index')" :active="isRouteActive(['factories.index', 'factories.create', 'factories.edit'])">
                         <template #icon>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@
                 </li>
 
                 <li class="relative px-6 py-3">
-                    <NavLink :href="route('employee.index')" :active="route().current('employee.index')">
+                    <NavLink :href="route('employee.index')" :active="isRouteActive(['employee.index', 'employee.create', 'employee.edit'])">
                         <template #icon>
                             <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                 stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
@@ -80,8 +80,9 @@
 
 <script>
 import NavLink from '@/Components/NavLink.vue'
-import { Link } from '@inertiajs/vue3';
-import { ref } from 'vue'
+import { Link, usePage } from '@inertiajs/vue3';
+import { ref, watch, onMounted } from 'vue'
+import { twoLevelMenu } from '@/TwoLevelMenu/menu';
 
 export default {
     components: {
@@ -90,10 +91,43 @@ export default {
     },
 
     setup() {
+
         let showingTwoLevelMenu = ref(false)
+        const page = usePage();
+
+        function toggleTwoLevelMenu() {
+            showingTwoLevelMenu.value = !showingTwoLevelMenu.value;
+        }
+
+        // This function checks if the current route matches
+        const isActive = (routeName) => {
+            return route().current(routeName);
+        };
+
+        // This function check if any child is active
+        const isAnyChildRouteActive = () => {
+            return Object.values(twoLevelMenu).flat().some(routeName => isActive(routeName));
+        };
+
+        const isRouteActive = (patterns) => {
+            // Check if current route matches any of the patterns
+            const currentRouteName = isActive();
+            return patterns.some(pattern => {
+                // Check for exact match or if pattern includes wildcard for dynamic segments
+                // console.log(currentRouteName === pattern);
+                return currentRouteName === pattern;
+            });
+        };
+
+        onMounted(() => {
+            showingTwoLevelMenu.value = isAnyChildRouteActive();
+        });
 
         return {
-            showingTwoLevelMenu
+            showingTwoLevelMenu,
+            toggleTwoLevelMenu,
+            isActive,
+            isRouteActive,
         }
     },
 }

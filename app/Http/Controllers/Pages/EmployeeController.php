@@ -58,7 +58,9 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        //
+        return Inertia::render('Employee/ShowEmployee', [
+            'employee' => new EmployeeResource($employee)
+        ]);
     }
 
     /**

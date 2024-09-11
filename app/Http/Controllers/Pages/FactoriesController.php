@@ -54,7 +54,9 @@ class FactoriesController extends Controller
      */
     public function show(Factories $factory)
     {
-        //
+        return Inertia::render('Factory/ShowFactory', [
+            'factory' => new FactoryResource($factory)
+        ]);
     }
 
     /**
